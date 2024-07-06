@@ -10,7 +10,7 @@
   "license": "AGPL-3.0",
   "type": "module",
   "scripts": {
-    "dev-server": "vuepress dev src",
+    "dev-server": "vuepress dev src --port 8090",
     "build": "vuepress build src",
     "clean": "rimraf dist",
     "check": "vuepress check-md src"
