@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mariadb
+    platform: linux/amd64
+    container_name: facilmap_mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: facilmap
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - facilmap_mysql_data:/var/lib/mysql
+
+  # postgres:
+  #     image: postgis/postgis:16-3.4
+  #     platform: linux/amd64
+  #     container_name: facilmap_postgres
+  #     environment:
+  #         POSTGRES_USER: facilmap
+  #         POSTGRES_PASSWORD: facilmap
+  #         POSTGRES_DB: facilmap
+  #     healthcheck:
+  #         test: pg_isready -d $$POSTGRES_DB
+  #     ports:
+  #         - "8011:5432"
+
+  adminer:
+    image: adminer
+    platform: linux/amd64
+    container_name: facilmap_adminer
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: facilmap_mysql
+      ADMINER_DEFAULT_DB_NAME: facilmap
+      ADMINER_PLUGINS: tables-filter tinymce
+      # ADMINER_DESIGN: nette
+    ports:
+      - 8020:8080
+
+volumes:
+  facilmap_mysql_data:
